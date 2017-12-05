@@ -29,12 +29,11 @@ async def select(sql, args, size=None):
                 rs = await cur.fetchmany(size)
             else:
                 rs = await cur.fetchall()
-            await cur.close()
-            logging.info('rows returned: %s' % len(rs))
+        logging.info('rows returned: %s' % len(rs))
+        return rs
 
 async def execute(sql, args, autocommit=True):
-    log(sql, args)
-    global __pool
+    log(sql)
     async with __pool.get() as conn:
         if not autocommit:
             await conn.begin()
@@ -54,7 +53,7 @@ def create_args_string(num):
     L = []
     for n in range(num):
         L.append('?')
-    return
+    return ', '.join(L)
 
 
 #classes
