@@ -1,11 +1,18 @@
 ' url handlers '
 
-from coroweb import get
-import asyncio
+import re, time, json, logging, hashlib, base64, asyncio
+
+from coroweb import get, post
+
+from models import User, Comment, Blog, next_id
 
 @get('/')
 async def index(request):
-    return '<h1>Hi, Qian</h1>'
+    users = await User.findAll()
+    return {
+        '__template__' : 'test.html',
+        'users' : users
+    }
 
 @get('/hello')
 async def hello(request):
